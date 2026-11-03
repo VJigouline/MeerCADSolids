@@ -1,0 +1,43 @@
+{
+  "name": "meercad-solids",
+  "version": "1.0.0",
+  "description": "CAD solids in boundary representation: primitives, polyhedra, swept and lofted solids, and boolean operations, behind one ISolid interface.",
+  "keywords": ["cad", "solids", "brep", "b-rep", "boundary-representation", "boolean", "geometry", "typescript"],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "Documentation", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build",
+    "prepare": "npm run build"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "meercad-curves": "github:VJigouline/MeerCADCurves#a4c30ce23020e88a7048b5f0a148d96b54e055bb",
+    "meercad-surfaces": "github:VJigouline/MeerCADSurfaces#ed94f8fdc05bcf9fa26543c83a068150a5c878a1"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.1.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VJigouline/MeerCADSolids.git"
+  }
+}
