@@ -95,13 +95,13 @@ The check exists because a closed solid can still enclose the wrong region. Duri
 **Limits:**
 
 - **The check is a sample, not a proof.** A wrong region smaller than the spacing of 48 points could pass it.
-- **Refusals happen.** On random pairs of solids, a small share of operations throw `BooleanError`, mostly on spheres. The stress test allows one refusal per four pairs.
+- **Refusals happen.** In one run on 144 random pairs of boxes, cylinders, spheres, cones, tori and tubes, each put through union, intersection and difference, 140 pairs succeeded in all three and 4 got a `BooleanError`, three of them on tubes. None gave a wrong answer, judged by inclusion and exclusion and by a grid count from the inputs. These are solids in general position, so special positions such as tangent contacts will do worse.
 - **Curved cuts are approximate.** They pass through points exact to the tolerance, and between them follow a spline. Volumes of results with curved cuts are typically good to `1e-4` or `1e-5`.
 - **Tangent contacts are not handled.** Surfaces that touch without crossing may give no cut or a fragment of one, which usually ends in a `BooleanError`.
 - **Curved surfaces that coincide over an area aren't reliable.** Coplanar flat faces are handled. Coincident curved ones are skipped when intersecting, which only works if neighbouring faces divide them properly.
 - **Non-manifold results are refused**, such as boxes touching along one edge.
 - **Faces aren't merged.** Coplanar fragments stay separate, and repeated operations gather more faces and edges.
-- **Cost.** Every pair of nearby faces is intersected, and curved results are meshed and checked, so an operation on curved solids takes from a fraction of a second to several seconds, more when retries are needed.
+- **Cost.** Every pair of nearby faces is intersected, and curved results are meshed and checked, so operations are not fast. In that run, one took about 1 s on average and the slowest pair about 13 s per operation, on one desktop machine.
 
 ## Numerical tolerances
 

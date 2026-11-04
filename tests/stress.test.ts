@@ -51,7 +51,7 @@ describe.each([
   ['box', 'torus'],
   ['cylinder', 'tube'],
 ])('random %s and %s', (first, second) => {
-  it('never gives a wrong answer, and rarely refuses', { timeout: 120000 }, () => {
+  it('never gives a wrong answer, and rarely refuses', () => {
     let refused = 0;
     const count = 4;
     for (let n = 0; n < count; n++) {

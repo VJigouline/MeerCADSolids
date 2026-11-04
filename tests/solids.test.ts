@@ -214,7 +214,7 @@ describe('point queries', () => {
     expect(hollow.classifyPoint(v(1, 0, 0))).toBe('boundary');
   });
 
-  it('agrees with a grid count on the volume', { timeout: 60000 }, () => {
+  it('agrees with a grid count on the volume', () => {
     expect(monteCarloVolume(new TorusSolid(world, 3, 1)) / (2 * PI * PI * 3)).toBeCloseTo(1, 1);
     expect(monteCarloVolume(new TubeSolid(world, 2, 1, 3)) / (PI * 3 * 3)).toBeCloseTo(1, 1);
   });

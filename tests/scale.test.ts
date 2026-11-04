@@ -13,7 +13,7 @@ describe.each(SCALES)('at model scale %d', (scale) => {
     const base = make();
     const solid: ISolid = base.transformed(up);
 
-    it('scales its measures, stays valid, and meshes closed', { timeout: 30000 }, () => {
+    it('scales its measures, stays valid, and meshes closed', () => {
       const digits = expected.numeric ? 3 : 5;
       expect(solid.volume / (base.volume * scale ** 3)).toBeCloseTo(1, digits);
       expect(solid.surfaceArea / (base.surfaceArea * scale ** 2)).toBeCloseTo(1, digits);
@@ -22,7 +22,7 @@ describe.each(SCALES)('at model scale %d', (scale) => {
       expect(isWatertight(solid.tessellate())).toBe(true);
     });
 
-    it('classifies a point on its boundary and well outside it', { timeout: 30000 }, () => {
+    it('classifies a point on its boundary and well outside it', () => {
       const mesh = solid.tessellate();
       const q = mesh.faces[0]!.points[0]!;
       expect(solid.classifyPoint(q)).toBe('boundary');
@@ -31,7 +31,7 @@ describe.each(SCALES)('at model scale %d', (scale) => {
     });
   });
 
-  it('does booleans at this scale', { timeout: 60000 }, () => {
+  it('does booleans at this scale', () => {
     const place = (x: number, y: number, z: number) => Frame3.fromNormal(v(x * scale, y * scale, z * scale));
     const a = new BoxSolid(place(0, 0, 0), 2 * scale, 2 * scale, 2 * scale);
     const b = new BoxSolid(place(1, 1, 1), 2 * scale, 2 * scale, 2 * scale);

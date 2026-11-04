@@ -41,7 +41,7 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     }
   });
 
-  it('has a closed mesh, whose measures agree with the exact ones', { timeout: 30000 }, () => {
+  it('has a closed mesh, whose measures agree with the exact ones', () => {
     const mesh = solid.tessellate({ chordTolerance: size / 400 });
     expect(mesh.triangles.length).toBeGreaterThan(0);
     expect(isWatertight(mesh)).toBe(true);
@@ -54,7 +54,7 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     expect(() => solid.tessellate({ chordTolerance: 0 })).toThrow(RangeError);
   });
 
-  it('gets closer to the exact measures with a finer mesh', { timeout: 60000 }, () => {
+  it('gets closer to the exact measures with a finer mesh', () => {
     const coarse = meshMeasures(solid.tessellate({ chordTolerance: size / 100 }));
     const fine = meshMeasures(solid.tessellate({ chordTolerance: size / 1600 }));
     const bound = 3 * solid.surfaceArea * (size / 1600);
@@ -69,7 +69,7 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     }
   });
 
-  it('classifies points on its boundary and around it', { timeout: 30000 }, () => {
+  it('classifies points on its boundary and around it', () => {
     const mesh = solid.tessellate({ chordTolerance: size / 200 });
     const stride = Math.max(1, Math.floor(mesh.faces.length));
     for (const f of mesh.faces.slice(0, stride)) {
@@ -85,7 +85,7 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     expect(solid.classifyPoint(box.max.add(v(size, size, size)))).toBe('outside');
   });
 
-  it('finds closest points', { timeout: 30000 }, () => {
+  it('finds closest points', () => {
     const mesh = solid.tessellate({ chordTolerance: size / 200 });
     const f = mesh.faces[0]!;
     const q = f.points[0]!;
@@ -98,7 +98,7 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     }
   });
 
-  it('crosses a line an even number of times, on its boundary', { timeout: 30000 }, () => {
+  it('crosses a line an even number of times, on its boundary', () => {
     const hits = solid.intersectLine(box.center.add(v(0.013, 0.007, 0.011)), v(0.31, 0.53, 0.79));
     expect(hits.length % 2).toBe(0);
     for (const h of hits) {
@@ -106,7 +106,7 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     }
   });
 
-  it('has a section through it that encloses area', { timeout: 30000 }, () => {
+  it('has a section through it that encloses area', () => {
     const c = solid.centroid;
     const section = solid.section(c.add(v(0.013, 0.007, 0.011).scale(size / 10)), v(0.2, 0.3, 0.9));
     if (solid.classifyPoint(c) === 'inside') {
@@ -120,7 +120,7 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     }
   });
 
-  it('keeps its measures under rigid transforms, and scales them', { timeout: 30000 }, () => {
+  it('keeps its measures under rigid transforms, and scales them', () => {
     const moved = solid.transformed(rotateAndMove);
     const digits = expected.numeric ? 3 : 6;
     expect(moved.volume / solid.volume).toBeCloseTo(1, digits);
@@ -132,7 +132,7 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     expect(big.surfaceArea / solid.surfaceArea).toBeCloseTo(4, digits - 1);
   });
 
-  it('stays outward and valid when mirrored', { timeout: 30000 }, () => {
+  it('stays outward and valid when mirrored', () => {
     const mirror = Transform3.mirror(v(0.3, -1, 0.2));
     const image = solid.transformed(mirror);
     expect(image.validate().problems).toEqual([]);
@@ -141,13 +141,13 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     expectPoint(image.centroid, mirror.applyToPoint(solid.centroid), (expected.numeric ? 1e-3 : 1e-6) * size);
   });
 
-  it('scales its volume by the determinant under a stretch', { timeout: 30000 }, () => {
+  it('scales its volume by the determinant under a stretch', () => {
     const stretched = solid.transformed(Transform3.scale(2, 1, 0.5));
     expect(stretched.volume / solid.volume).toBeCloseTo(1, expected.numeric ? 3 : 5);
     expect(stretched.validate().problems).toEqual([]);
   });
 
-  it('has an inertia tensor that is valid', { timeout: 30000 }, () => {
+  it('has an inertia tensor that is valid', () => {
     const m = solid.massProperties(3);
     expect(m.mass).toBeCloseTo(m.volume * 3, 9);
     const { xx, yy, zz } = m.inertia;
@@ -161,7 +161,7 @@ describe.each(Object.entries(catalog))('%s', (_name, { make, expected }) => {
     expect(() => solid.massProperties(0)).toThrow(RangeError);
   });
 
-  it('round-trips through JSON', { timeout: 30000 }, () => {
+  it('round-trips through JSON', () => {
     const json = JSON.parse(JSON.stringify(solid.toJSON())) as SolidJSON;
     const copy = solidFromJSON(json);
     expect(copy.type).toBe(solid.type);
